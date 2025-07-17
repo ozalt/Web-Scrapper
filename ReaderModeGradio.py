@@ -39,7 +39,7 @@ class WebScraper:
         self.meta_description = meta_tag['content'] if meta_tag else None
 
         # Remove global tags except 'header' which is handled below
-        for tag in ['aside', 'nav', 'footer', 'form', 'iframe', 'script', 'svg', 'button', 'select','input', 'label', 'source']:
+        for tag in ['aside', 'nav', 'footer', 'form', 'iframe', 'script', 'svg', 'button', 'select','input', 'label', 'source', 'form', 'audio', 'video']:
             for element in soup.find_all(tag):
                 element.decompose()
 
@@ -60,11 +60,6 @@ class WebScraper:
 
         main = soup.find('main') or soup.find('article') or soup.find('div', class_='content') or soup.body
 
-        # Decompose <img> and <a> tags inside h1-h4
-        for heading_tag in main.find_all(['h1', 'h2', 'h3', 'h4']):
-            for nested in heading_tag.find_all(['img', 'a']):
-                nested.decompose()
-        
         for picture in main.find_all('picture'):
             img = picture.find('img')
             if img:
