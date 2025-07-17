@@ -1,0 +1,11 @@
+{
+  "url": "https://docs.unsloth.ai/basics/gemma-3n-how-to-run-and-fine-tune",
+  "title": "Gemma 3n: How to Run & Fine-tune | Unsloth Documentation",
+  "author": "",
+  "description": "Run Google's new Gemma 3n locally with Dynamic GGUFs on llama.cpp, Ollama, Open WebUI and fine-tune with Unsloth!",
+  "published_time": "",
+  "content_html": "html",
+  "content_text": "html\n\n",
+  "extraction_date": "2025-07-16T19:01:52.557158",
+  "extraction_tool": "Python Reader Mode"
+}

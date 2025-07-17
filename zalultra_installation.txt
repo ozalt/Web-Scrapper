@@ -1,0 +1,71 @@
+
+
+Settings​:
+
+
+General Settings​:
+Effortlessly customize your ISP software to reflect your brand. Add your logo, company details, and support contacts. Configure the time zone, currency, and address with ease. Boost SEO by optimizing meta information—all in a seamless and efficient setup!
+
+![Image](https://docs.onezeroart.com/assets/general_settings.B0UAu1RK.png)
+
+Number
+Attribute
+Description
+1
+Logo
+Upload your company's logo to personalize the branding of your ISP software.
+2
+Favicon
+Add a favicon, a small icon displayed in the browser tab, to enhance your software's visual identity.
+3
+Company Name
+Enter the official name of your ISP company.
+4
+Company Slogan
+Provide a brief and catchy slogan that represents the essence of your company.
+5
+Support Phone
+Input the contact phone number for customer support.
+6
+Support Email
+Enter the email address for customer support inquiries.
+7
+Local Timezone
+Choose your local timezone carefully, as an incorrect setting may cause issues with date and time. Ensure that your router’s timezone and clock are properly synchronized with Zal Ultra to avoid discrepancies.
+8
+Default Currency
+Select the default currency for financial transactions and displays.
+9
+Address
+Input the official address of your ISP company.
+10
+City
+Specify the city where your ISP company is located.
+11
+Country
+Choose the country where your ISP company operates.
+12
+Zip Code
+Enter the postal code or ZIP code for your company's location.
+13
+Latitude
+Insert latitude coordinates for maps. Use this format Ex: 23.810331. Use
+this site
+to get your coordinates.
+14
+Longitude
+Insert longitude coordinates for maps. Use this format Ex: 90.412521. Use
+this site
+to get your coordinates.
+15
+Copyright Text
+Specify the text that will be displayed as the copyright notice.
+16
+Meta Description
+Provide a concise and informative meta description for the software.
+17
+Meta Keyword
+Enter keywords relevant to the software for search engine optimization (SEO).
+18
+Meta Author
+Specify the author or entity responsible for the software's content.
