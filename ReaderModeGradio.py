@@ -38,17 +38,83 @@ class WebScraper:
         meta_tag = soup.find('meta', attrs={'name': 'description'})
         self.meta_description = meta_tag['content'] if meta_tag else None
 
-        for tag in ['aside', 'nav', 'footer', 'header', 'form', 'iframe', 'script', 'svg']:
+        # Remove global tags except 'header' which is handled below
+        for tag in ['aside', 'nav', 'footer', 'form', 'iframe', 'script', 'svg', 'button', 'select','input', 'label', 'source']:
             for element in soup.find_all(tag):
                 element.decompose()
 
+        for header in soup.find_all('header'):
+            parent = header.find_parent(['main', 'article'])
+
+            if parent:
+                # If header is inside <main> or <article>, keep only h1–h4 tags
+                for child in list(header.contents):
+                    if not (getattr(child, 'name', None) in ['h1', 'h2', 'h3', 'h4']):
+                        child.extract()
+                # If it becomes empty after stripping non-headings, remove it too
+                if not header.find(['h1', 'h2', 'h3', 'h4']):
+                    header.decompose()
+            else:
+                # Header outside main/article: remove completely
+                header.decompose()
+
         main = soup.find('main') or soup.find('article') or soup.find('div', class_='content') or soup.body
 
+        # Decompose <img> and <a> tags inside h1-h4
+        for heading_tag in main.find_all(['h1', 'h2', 'h3', 'h4']):
+            for nested in heading_tag.find_all(['img', 'a']):
+                nested.decompose()
+        
+        for picture in main.find_all('picture'):
+            img = picture.find('img')
+            if img:
+                picture.insert_after(img)  # Move <img> out
+            picture.decompose()  # Remove the original <picture>
+
+        for div in main.find_all('div', attrs={'data-svelte-h': True}):
+            div.decompose() 
+
+        # Remove <div> that contains only <a> tags and nothing else
+        for div in main.find_all('div'):
+            contents = [child for child in div.contents if not isinstance(child, NavigableString) or child.strip()]
+            if contents and all(child.name == 'a' for child in contents if hasattr(child, 'name')):
+                div.decompose()
+
+        # Remove div with id of Comment or Comments
+        for div in main.find_all('div', id=lambda x: x and x.lower() in ['comment', 'comments','sidebar', 'right-sidebar']):
+            div.decompose()
+
+        # Unwrap all <a> tags inside the main content
+        for a_tag in main.find_all('a'):
+            a_tag.unwrap()
+
+        # Remove any <a> tags that contain images
+        for a_tag in main.find_all('a'):
+            if a_tag.find('img'):
+                a_tag.decompose()
+
+        #Remove any <li>        
+        for li in main.find_all('li'):
+            class_id_values = ' '.join(filter(None, [*li.get('class', []), li.get('id') or ''])).lower()
+            if any(social in class_id_values for social in ['instagram', 'facebook', 'twitter', 'whatsapp', 'snapchat']):
+                li.decompose()
+
+        # Remove <ul> elements with class "table-of-contents"
+        for ul in main.find_all('ul', class_='table-of-contents'):
+            ul.decompose()
+
+        #It ensures garbage markup like <span><a>…</a></span> or <span><img /></span> vanishes cleanly.
+        for span in main.find_all('span'):
+            children = [child for child in span.contents if not isinstance(child, NavigableString) or child.strip()]
+            if len(children) == 1 and getattr(children[0], 'name', None) in ['img', 'a']:
+                span.decompose()
+        # Remove inline styles
         for tag in main.find_all(True):
             if 'style' in tag.attrs:
                 del tag['style']
 
         self.main_html = str(main)
+
 
     def save(self):
         try:
