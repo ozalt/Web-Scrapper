@@ -76,7 +76,7 @@ class WebScraper:
                 div.decompose()
 
         # Remove div with id of Comment or Comments
-        for div in main.find_all('div', id=lambda x: x and x.lower() in ['comment', 'comments','sidebar', 'right-sidebar']):
+        for div in main.find_all('div', id=lambda x: x and x.lower() in ['comment', 'comments','sidebar', 'right-sidebar', 'md-sidebar','breadcrumbs','reviews','feedback']):
             div.decompose()
 
         # Unwrap all <a> tags inside the main content
