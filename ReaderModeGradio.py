@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup, NavigableString
 from urllib.parse import urljoin
 import pymysql
+from pymysql.cursors import DictCursor
 import time
 
 # ========== CONFIG ==========
@@ -43,6 +44,13 @@ class WebScraper:
             for element in soup.find_all(tag):
                 element.decompose()
 
+         #Tags of Google-Styled Docs that are irrelevant
+        for tag in ['devsite-toc', 'devsite-feedback', 'devsite-nav', 'devsite-footer',
+                    'devsite-banner', 'devsite-section-nav', 'devsite-book-nav', 'google-codelab-step',
+                    'mdn-sidebar', 'mdn-toc', 'api-index', 'amp-sidebar', 'amp-accordion']:
+            for element in soup.find_all(tag):
+                element.decompose()
+
         for header in soup.find_all('header'):
             parent = header.find_parent(['main', 'article'])
 
@@ -60,6 +68,10 @@ class WebScraper:
 
         main = soup.find('main') or soup.find('article') or soup.find('div', class_='content') or soup.body
 
+        for tag in main.find_all(['h1', 'h2', 'h3', 'h4', 'h5']):
+            for div in tag.find_all('div'):
+                div.decompose()
+
         for picture in main.find_all('picture'):
             img = picture.find('img')
             if img:
@@ -76,7 +88,22 @@ class WebScraper:
                 div.decompose()
 
         # Remove div with id of Comment or Comments
-        for div in main.find_all('div', id=lambda x: x and x.lower() in ['comment', 'comments','sidebar', 'right-sidebar', 'md-sidebar','breadcrumbs','reviews','feedback']):
+        for div in main.find_all('div', id=lambda x: x and x.lower() in ['comment', 'comments','sidebar', 'right-sidebar', 'md-sidebar','breadcrumbs','breadcrumb','reviews','feedback']):
+            div.decompose()
+
+        for div in main.find_all('div', role=lambda x: x and x.lower() in ['nav', 'navigation', 'sidebar', 'breadcrumb', 'breadcrumbs','header','heading', 'menubar', 'menu']):
+            div.decompose()
+            
+        for div in main.find_all('div', attrs={'aria-label': lambda x: x and x.lower() in ['nav', 'navbar','navigation', 'sidebar', 'breadcrumb', 'breadcrumbs', 'menubar', 'menu']}):
+            div.decompose()
+
+        for div in main.find_all('div', attrs={'class': lambda x: x and x.lower() in ['nav', 'navbar','navigation', 'sidebar', 'breadcrumb', 'breadcrumbs', 'menubar', 'menu']}):
+            div.decompose()
+
+        for div in main.find_all('ul', role=lambda x: x and x.lower() in ['nav', 'navigation', 'sidebar', 'breadcrumb', 'breadcrumbs','header','heading','menubar', 'menu']):
+            div.decompose()
+
+        for div in main.find_all('ul', attrs={'aria-label': lambda x: x and x.lower() in ['nav', 'navigation', 'sidebar', 'breadcrumb', 'breadcrumbs','menubar', 'menu']}):
             div.decompose()
 
         # Unwrap all <a> tags inside the main content
