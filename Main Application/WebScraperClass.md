@@ -397,5 +397,3 @@ This document details the functionality of the `WebScraper` class, outlining its
           * **`conn.close()`:** Ensures the database connection is closed regardless of whether the `try` block succeeded or an exception occurred. This is vital for resource management.
 
 -----
-
-This detailed breakdown provides a clear, block-by-block explanation of the web scraper's functionality, ideal for presenting to other developers.
