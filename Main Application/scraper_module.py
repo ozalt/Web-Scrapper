@@ -48,7 +48,7 @@ class ScrapLogic:
         self.meta_description = meta_tag['content'] if meta_tag else None
 
         # Remove irrelevant global tags
-        for tag in ['aside', 'nav', 'footer', 'form', 'iframe', 'script', 'svg', 'button', 'select','input', 'label', 'source', 'form', 'audio', 'video']:
+        for tag in ['aside', 'nav', 'footer', 'form', 'iframe', 'script', 'svg', 'button', 'select','input', 'label', 'source', 'form', 'audio', 'video', 'img']:
             for element in soup.find_all(tag):
                 element.decompose()
 
